@@ -1,21 +1,17 @@
-package com.example.openweatherapp.ui
+package com.example.openweatherapp.ui.home
 
-/*import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.openweatherapp.data.local.WeatherEntity
 import com.example.openweatherapp.data.repository.WeatherRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-data class WeatherUiState(
-    val weather: WeatherEntity? = null,
-    val isLoading: Boolean = false,
-    val error: String? = null
-)
-
-class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() {
-
+@HiltViewModel
+class WeatherViewModel @Inject constructor(private val repository: WeatherRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
@@ -24,7 +20,7 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
     fun loadWeather(cityName: String, forceRefresh: Boolean = false) {
         currentCity = cityName
 
-        // Observe the Room cache reactively
+        /*// Observe the Room cache reactively
         repository.observeWeather(cityName)
             .onEach { entity -> _uiState.update { it.copy(weather = entity) } }
             .launchIn(viewModelScope)
@@ -39,20 +35,13 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
             } finally {
                 _uiState.update { it.copy(isLoading = false) }
             }
-        }
-    }
-
-    fun retry() {
-        currentCity?.let { loadWeather(it, forceRefresh = true) }
-    }
-
-    class Factory(private val repository: WeatherRepository) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(WeatherViewModel::class.java)) {
-                return WeatherViewModel(repository) as T
+        }*/
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(5000)
+            val response = repository.refreshWeather()
+            with(Dispatchers.Main) {
+                _uiState.update { it.copy(weather = response) }
             }
-            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }
-}*/
+}

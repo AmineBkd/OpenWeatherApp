@@ -1,10 +1,9 @@
-package com.example.openweatherapp.data.remote
+package com.example.openweatherapp.data.remote.api.openmeteo
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitClient {
-
+object RetrofitWeatherClient {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(WeatherService.BASE_URL)

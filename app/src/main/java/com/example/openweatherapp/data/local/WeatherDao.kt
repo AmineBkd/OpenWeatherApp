@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
-
+    /*
     @Query("SELECT * FROM weather_cache WHERE cityName = :cityName LIMIT 1")
     fun observeWeather(cityName: String): Flow<WeatherEntity?>
 
@@ -17,4 +17,7 @@ interface WeatherDao {
 
     @Query("DELETE FROM weather_cache")
     fun clearAll()
+
+    @Query("SELECT * FROM weather_cache WHERE cityName = :cityName LIMIT 1")
+    fun getWeather(cityName: String): WeatherEntity?*/
 }
