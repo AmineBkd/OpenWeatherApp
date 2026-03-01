@@ -12,7 +12,13 @@ fun WeatherScreen(
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-    Text(text = state.weather.toString())
+    if(state.isLoading) {
+        Text(text = "Loading ...")
+    } else if(state.error != null) {
+        Text(text = state.error ?: "Unknown Error")
+    } else {
+        Text(text = state.toString())
+    }
 }
 
 @Composable

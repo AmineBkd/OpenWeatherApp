@@ -1,7 +1,7 @@
 package com.example.openweatherapp.di
 
 import com.example.openweatherapp.data.local.WeatherDatabase
-import com.example.openweatherapp.data.repository.WeatherRepository
+import com.example.openweatherapp.data.remote.repository.WeatherRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ object RepositoryModule {
     @Singleton
     fun provideWeatherRepository(
         database: WeatherDatabase
-    ) : WeatherRepository {
-        return WeatherRepository(database)
+    ) : WeatherRepositoryImpl {
+        return WeatherRepositoryImpl(database)
     }
 }
