@@ -6,6 +6,7 @@ import com.example.openweatherapp.domain.model.WeatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.Double
 
 class GetWeatherByLocation @Inject constructor(
     private val weatherRepositoryImpl: WeatherRepositoryImpl,
@@ -22,7 +23,14 @@ class GetWeatherByLocation @Inject constructor(
                         cityName = countryInformation.city ?: "",
                         temperature = weatherResponse.temperature2m,
                         windSpeed = weatherResponse.windSpeed10m,
-                        humidity = weatherResponse.relativeHumidity2m
+                        humidity = weatherResponse.relativeHumidity2m,
+                        rain = weatherResponse.rain,
+                        precipitation = weatherResponse.precipitation,
+                        precipitationProbability = weatherResponse.precipitationProbability,
+                        apparentTemperature = weatherResponse.apparentTemperature,
+                        showers = weatherResponse.showers,
+                        snowfall = weatherResponse.snowfall,
+                        isDay = weatherResponse.isDay,
                     )
                 )
             } else {

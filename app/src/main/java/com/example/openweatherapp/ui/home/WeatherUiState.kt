@@ -1,7 +1,5 @@
 package com.example.openweatherapp.ui.home
 
-import com.example.openweatherapp.data.model.WeatherResponse
-
 data class WeatherUiState(
     val countryName: String = "",
     val cityName: String = "",

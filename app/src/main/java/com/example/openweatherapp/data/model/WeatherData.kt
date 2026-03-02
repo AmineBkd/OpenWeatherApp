@@ -29,6 +29,13 @@ data class CurrentWeather(
     @SerializedName("temperature_2m") val temperature2m: Double,
     @SerializedName("wind_speed_10m") val windSpeed10m: Double,
     @SerializedName("relative_humidity_2m") val relativeHumidity2m: Double,
+    @SerializedName("rain") val rain: Double,
+    @SerializedName("precipitation") val precipitation: Double,
+    @SerializedName("precipitation_probability") val precipitationProbability: Int,
+    @SerializedName("apparent_temperature") val apparentTemperature: Double,
+    @SerializedName("showers") val showers: Double,
+    @SerializedName("snowfall") val snowfall: Double,
+    @SerializedName("is_day") val isDay: Int,
 )
 
 data class HourlyUnits(
