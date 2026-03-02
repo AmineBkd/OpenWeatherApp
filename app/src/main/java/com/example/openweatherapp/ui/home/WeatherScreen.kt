@@ -1,5 +1,8 @@
 package com.example.openweatherapp.ui.home
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -13,6 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +24,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.openweatherapp.R
+import com.google.android.gms.location.LocationServices
 
 @Composable
 fun WeatherScreen(
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val locationClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            try {
+                locationClient.lastLocation.addOnSuccessListener { location ->
+                    location?.let { viewModel.updateLocation(it.latitude, it.longitude) }
+                }
+            } catch (e: SecurityException) { /* handle security exception if needed */ }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    LaunchedEffect(state.currentMachineLocation) {
+        state.currentMachineLocation?.let {
+            viewModel.loadWeather(
+                it.first,
+                it.second
+            )
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -44,9 +77,11 @@ fun WeatherScreen(
                 currentState.isLoading -> {
                     LoadingContent()
                 }
+
                 currentState.error != null -> {
                     ErrorContent(error = currentState.error)
                 }
+
                 else -> {
                     WeatherContent(state = currentState)
                 }

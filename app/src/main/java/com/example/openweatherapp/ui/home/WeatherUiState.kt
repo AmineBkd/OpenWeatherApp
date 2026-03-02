@@ -6,6 +6,7 @@ data class WeatherUiState(
     val temperature: Double = 0.0,
     val windSpeed: Double = 0.0,
     val humidity: Double = 0.0,
+    val currentMachineLocation: Pair<Double, Double>? = null,
     val isLoading: Boolean = true,
     val error: String? = null,
 )

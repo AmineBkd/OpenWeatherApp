@@ -45,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.services.location)
+
     implementation(libs.squareup.okhttp3)
     implementation(libs.squareup.okhttp3.logging.interceptor)
 

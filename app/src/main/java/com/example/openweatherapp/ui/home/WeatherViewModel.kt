@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.openweatherapp.domain.usecase.GetWeatherByLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,15 +15,12 @@ class WeatherViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
-    //not optimal for testing
-    init {
-        //TODO: add current location depending on the phone
-        loadWeather(48.8566, 2.3522) //France Paris
-    }
-
-    private fun loadWeather(latitude: Double, longitude: Double) {
+    //Default Location: France Paris
+    fun loadWeather(
+        latitude: Double = 48.85661,
+        longitude: Double = 2.35222,
+    ) {
         viewModelScope.launch {
-            delay(5000)
             _uiState.update { it.copy(isLoading = true, error = null) }
             val response = getWeatherByLocation.execute(latitude, longitude)
             if (response.isSuccess) {
@@ -52,5 +48,9 @@ class WeatherViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateLocation(latitude: Double, longitude: Double) {
+        _uiState.update { it.copy(currentMachineLocation = Pair(latitude, longitude)) }
     }
 }

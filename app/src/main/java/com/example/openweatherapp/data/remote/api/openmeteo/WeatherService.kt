@@ -9,7 +9,7 @@ interface WeatherService {
     suspend fun getCurrentWeather(
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
-        @Query("current") current: String = "temperature_2m,relative_humidity_2m,rain,precipitation,precipitation_probability,apparent_temperature,showers,snowfall",
+        @Query("current") current: String = "temperature_2m,relative_humidity_2m,wind_speed_10m,rain,precipitation,precipitation_probability,apparent_temperature,showers,snowfall",
         @Query("hourly") hourly: String = "temperature_2m,relative_humidity_2m,wind_speed_10m"
     ) : WeatherResponse
 
